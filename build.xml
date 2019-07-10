@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="AntPractice" default="build-all" basedir=".">
+
+    <target name="build-all">
+        <ant antfile="../main/build.xml" dir="main" target="jar"/>
+    </target>
+
+</project>

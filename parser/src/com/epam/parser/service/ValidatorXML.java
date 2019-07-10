@@ -19,6 +19,7 @@ public class ValidatorXML {
     }
 
     public static boolean validate(File xmlFile, File xsdFile) {
+        log.info("Validating...");
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         try {
             Schema schema = schemaFactory.newSchema(xsdFile);
