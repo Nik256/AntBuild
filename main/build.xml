@@ -1,39 +1,18 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="Main" basedir="." default="jar">
-
-    <property name="lib.dir" value="../lib"/>
-    <property name="src.dir" value="src"/>
-    <property name="build.dir" value="build"/>
-    <property name="classes.dir" value="${build.dir}/classes"/>
-    <property name="jar.dir" value="${build.dir}/jar"/>
+    <import file="../build-common.xml"/>
     <property name="main-class" value="com.epam.main.DemoParser"/>
     <property name="resources.dir" value="${src.dir}/resources"/>
-    <property name="parser.dir" value="../parser"/>
+    <property name="parser.dir" value="../parser/${build.dir}/jar"/>
 
-    <path id="classpath">
-        <fileset dir="${lib.dir}" includes="**/*.jar"/>
-        <fileset dir="${parser.dir}/${build.dir}" includes="**/*.jar"/>
-    </path>
-
-    <target name="compile" depends="build-deps">
-        <echo message="Building module: ${ant.project.name}"/>
-        <mkdir dir="${classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" includeantruntime="false">
-        </javac>
-    </target>
-
-    <target name="clean">
-        <delete dir="${build.dir}"/>
-    </target>
-
-    <target name="jar" depends="compile">
+    <target name="jar" depends="build-deps,compile">
         <mkdir dir="${jar.dir}"/>
         <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
             <manifest>
                 <attribute name="Main-Class" value="${main-class}"/>
             </manifest>
             <zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />
-            <zipgroupfileset dir="${parser.dir}/${jar.dir}" includes="**/*.jar" />
+            <zipgroupfileset dir="${parser.dir}" includes="**/*.jar" />
             <zipfileset dir="${resources.dir}" includes="**/config.properties" prefix="resources"/>
             <fileset dir="${resources.dir}/log4j" includes="**/*.properties"/>
         </jar>
@@ -41,12 +20,15 @@
 
     <target name="build-deps" depends="clean">
         <ant antfile="../parser/build.xml" dir="../parser" target="jar"/>
+        <mkdir dir="${dep.dir}" />
+        <copy todir="${dep.dir}">
+            <fileset dir="${parser.dir}"/>
+        </copy>
     </target>
 
     <target name="run" depends="jar">
         <java fork="true" classname="${main-class}">
             <classpath>
-                <path refid="classpath"/>
                 <path location="${jar.dir}/${ant.project.name}.jar"/>
             </classpath>
         </java>

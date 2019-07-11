@@ -1,33 +1,4 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="Parser" basedir="." default="jar">
-
-    <property name="lib.dir" value="../lib"/>
-    <property name="src.dir" value="src"/>
-    <property name="build.dir" value="build"/>
-    <property name="classes.dir" value="${build.dir}/classes"/>
-    <property name="jar.dir" value="${build.dir}/jar"/>
-    <property name="resources.dir" value="${src.dir}/resources"/>
-
-    <path id="classpath">
-        <fileset dir="${lib.dir}" includes="**/*.jar"/>
-    </path>
-
-    <target name="compile" depends="clean">
-        <echo message="Building module: ${ant.project.name}"/>
-        <mkdir dir="${classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" includeantruntime="false">
-        </javac>
-    </target>
-
-    <target name="clean">
-        <delete dir="${build.dir}"/>
-    </target>
-
-    <target name="jar" depends="compile">
-        <mkdir dir="${jar.dir}"/>
-        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
-            <fileset dir="${resources.dir}" includes="**/*.properties"/>
-        </jar>
-    </target>
-
+    <import file="../build-common.xml"/>
 </project>

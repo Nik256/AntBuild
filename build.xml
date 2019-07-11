@@ -1,8 +1,55 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="AntPractice" default="build-all" basedir=".">
+<project name="AntPractice" default="build" basedir=".">
+    <property name="profile" value="dev"/>
+    <property name="ac.dir" value="lib/ant-contrib-1.0b3.jar"/>
+    <property name="logs.dir" value="logs"/>
 
-    <target name="build-all">
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="${ac.dir}"/>
+        </classpath>
+    </taskdef>
+
+    <target name="build" depends="init">
+        <if>
+            <equals arg1="${profile}" arg2="dev"/>
+            <then>
+                <antcall target="dev"/>
+            </then>
+        </if>
+        <if>
+            <equals arg1="${profile}" arg2="qa"/>
+            <then>
+                <antcall target="qa"/>
+            </then>
+        </if>
+        <antcall target="exit"/>
+    </target>
+
+    <target name="dev">
+        <echo>Build "dev" is running...</echo>
         <ant antfile="../main/build.xml" dir="main" target="jar"/>
+    </target>
+
+    <target name="qa">
+        <echo>Build "qa" is running...</echo>
+        <ant antfile="../main/build.xml" dir="main" target="jar"/>
+    </target>
+
+    <target name="build-all" depends="init">
+        <ant antfile="../parser/build.xml" dir="parser" target="jar"/>
+        <ant antfile="../main/build.xml" dir="main" target="jar"/>
+        <antcall target="exit"/>
+    </target>
+
+
+    <target name="init">
+        <mkdir dir="${logs.dir}"/>
+        <record name="${logs.dir}/build_log.txt" action="start"/>
+    </target>
+
+    <target name="exit">
+        <record name="${logs.dir}/build_log.txt" action="stop"/>
     </target>
 
 </project>
