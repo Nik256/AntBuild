@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="AntPractice" default="build" basedir=".">
     <property name="profile" value="dev"/>
-    <property name="ac.dir" value="lib/ant-contrib-1.0b3.jar"/>
+    <property name="ac.dir" value="build-lib/ant-contrib-1.0b3.jar"/>
     <property name="logs.dir" value="logs"/>
 
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
